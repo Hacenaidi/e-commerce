@@ -1,8 +1,9 @@
 import React from "react";
 import FromInput from "../form-input/form-input.component";
 import "./sign-in.style.scss";
-import { signInWithGoogle } from "../../firebase/firebase.utils";
+import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import CustomButtom from "../custom-buttom/custom-buttom.component";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 class SingIn extends React.Component {
   constructor(props) {
@@ -14,7 +15,13 @@ class SingIn extends React.Component {
   }
   handleSubmit = (event) => {
     event.preventDefault();
-    this.setState({ email: "", password: "" });
+    const { email, password } = this.state;
+    try {
+      signInWithEmailAndPassword(auth, email, password);
+      this.setState({ email: "", password: "" });
+    } catch (error) {
+      console.log(error );
+    }
   };
   handleChange = (event) => {
     const { value, name } = event.target;
